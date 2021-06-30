@@ -1,9 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-#import os
+import webbrowser
 
-test = requests.get("https://www.youtube.com/c/KalleHallden/videos")
+test = requests.get("https://www.youtube.com/c/DIYPerks/videos")
 if test.status_code ==200:
     print("Website exists")
 elif test.status_code == 404:
@@ -13,9 +13,8 @@ scrapped_web = soup.prettify()
 r = re.findall(r'\"title\":.*?,\"webPageType\":',soup.prettify())
 link = re.findall(r'\"/watch.*?\"',r[1])
 newVideoLink = link[0].replace('"','')
-print('https://www.youtube.com'+newVideoLink)
+newestVideoLink = 'https://www.youtube.com'+newVideoLink
 
-
-
+webbrowser.get("google-chrome").open(newestVideoLink)
 
 
