@@ -3,9 +3,17 @@ from bs4 import BeautifulSoup
 import re
 import webbrowser
 
-creator = input("Enter the YouTube Creators Videos link: ")
+with open("/home/nkt/Scripting/Projects/WebScraping/KalleHalldenNewVideo/creators.txt") as f:
+    creator = f.read().splitlines()
+    print("List of creator who you can check if uploaded today: \n------------------------\n")
+    for j in range(len(creator)):
+        print(str(j+1) + ". " + creator[j])
+    selectedCreator = int(input("\nEnter Number: "))
+    watchCreator = creator[selectedCreator-1]
 
-ytUserLink = "https://www.youtube.com/c/"+creator+"/videos"
+#watchCreator = input("Enter the YouTube Creators Videos link: ")
+
+ytUserLink = "https://www.youtube.com/c/"+watchCreator+"/videos"
 
 test = requests.get(ytUserLink)
 if test.status_code ==200:
