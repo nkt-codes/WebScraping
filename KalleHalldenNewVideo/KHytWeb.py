@@ -3,17 +3,23 @@ from bs4 import BeautifulSoup
 import re
 import webbrowser
 
-with open("/home/nkt/Scripting/Projects/WebScraping/KalleHalldenNewVideo/creators.txt") as f:
-    creator = f.read().splitlines()
-    print("List of creator who you can check if uploaded today: \n------------------------\n")
-    for j in range(len(creator)):
-        print(str(j+1) + ". " + creator[j])
-    selectedCreator = int(input("\nEnter Number: "))
-    watchCreator = creator[selectedCreator-1]
-
+def creatorSelect():
+    with open("/home/nkt/Scripting/Projects/WebScraping/KalleHalldenNewVideo/creators.txt") as f:
+        creator = f.read().splitlines()
+        print("List of creator who you can check if uploaded today: \n------------------------\n")
+        for j in range(len(creator)):
+            print(str(j+1) + ". " + creator[j])
+        selectedCreator = input("\nEnter Number or q to quit: ")
+        if selectedCreator == "q":
+            print("You can check later... :)")
+            exit()
+        else:
+            return creator[int(selectedCreator)-1]
+            
 #watchCreator = input("Enter the YouTube Creators Videos link: ")
+ytUserLink = "https://www.youtube.com/c/"+creatorSelect()+"/videos"
 
-ytUserLink = "https://www.youtube.com/c/"+watchCreator+"/videos"
+print(ytUserLink)
 
 test = requests.get(ytUserLink)
 if test.status_code ==200:
@@ -33,7 +39,7 @@ def openNewVideoBrowser ():
     newVideoLink = link[0].replace('"','')
     newestVideoLink = 'https://www.youtube.com'+newVideoLink
 
-    webbrowser.get("google-chrome").open(newestVideoLink)
+    webbrowser.get("google-chrome").open(newestVideoLink,new=2)
 
 while True:
     if re.search(r'days',ifLatest[0]):
@@ -42,13 +48,13 @@ while True:
 
     elif re.search(r'hours',ifLatest[0]):
         hourTime = re.findall(r'\d?\d',ifLatest[0])
-        print("Video was uploaded" + hourTime[0]+" Hours ago.")
+        print("Video was uploaded " + hourTime[0]+" Hours ago.")
         openNewVideoBrowser()
         break
 
     elif re.search(r'minutes',ifLatest[0]):
         minuteTime = re.findall(r'\d?\d',ifLatest[0])
-        print("Video was uploaded" + minuteTime[0]+" Minutes ago")
+        print("Video was uploaded " + minuteTime[0]+" Minutes ago")
         openNewVideoBrowser()
         break
         
